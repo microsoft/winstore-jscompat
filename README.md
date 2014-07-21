@@ -8,7 +8,7 @@ Today, running a Windows Store app using AngularJS in Visual Studio might return
 
 ![](https://raw.githubusercontent.com/MSOpenTech/winstore-jscompat/master/error.PNG?token=3019602__eyJzY29wZSI6IlJhd0Jsb2I6TVNPcGVuVGVjaC93aW5zdG9yZS1qc2NvbXBhdC9tYXN0ZXIvZXJyb3IuUE5HIiwiZXhwaXJlcyI6MTQwNjU3OTYyOX0%3D--101970399d1c4e94bbe251e71e78f8be6af6d7ba)
 
-Properties such as innerHTML, and outerHTML are filtered in order to avoid the common security issues that can result from the unsafe handling of untrusted data.
+Properties such as innerHTML and outerHTML are filtered in order to avoid the common security issues that can result from the unsafe handling of untrusted data.
 
 In order to unblock these setbacks, Microsoft Open Technologies (MS Open Tech) has released the JavaScript Dynamic Content shim for Windows Store apps. This mitigation relaxes the manner in which checks are performed, yet still achieves the fundamental goal set by the security model.
 
