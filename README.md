@@ -13,6 +13,6 @@ Properties such as innerHTML and outerHTML are filtered in order to avoid the co
 In order to unblock these setbacks, Microsoft Open Technologies (MS Open Tech) has released the JavaScript Dynamic Content shim for Windows Store apps. This mitigation relaxes the manner in which checks are performed, yet still achieves the fundamental goal set by the security model.
 
 # Instructions
-Simply reference the winstore-jscompat.js file towards the beginning of your app, before any other scripts are run.
+Simply reference the `winstore-jscompat.js` file towards the beginning of your app, before any other scripts are run.
 
 Please note that there may be a minor impact on your app's performance, the extent of which depends upon the specific usage, timing, and frequency of the three property calls listed above.
