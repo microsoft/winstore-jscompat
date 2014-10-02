@@ -34,17 +34,24 @@
             return Node_get_childNodes.call(element);
         }
 
+        function empty(element) {
+            while (element.childNodes.length) {
+                element.removeChild(element.lastChild);
+            }
+        }
+
         function insertAdjacentHTML(element, position, html) {
             HTMLElement_insertAdjacentHTMLPropertyDescriptor.value.call(element, position, html);
         }
 
         function cleanse(html) {
             var cleaner = document.implementation.createHTMLDocument("cleaner");
+            empty(cleaner.documentElement);
             MSApp.execUnsafeLocalFunction(function () {
-                insertAdjacentHTML(cleaner.body, "afterbegin", html);
+                insertAdjacentHTML(cleaner.documentElement, "afterbegin", html);
             });
 
-            var scripts = cleaner.body.querySelectorAll("script");
+            var scripts = cleaner.documentElement.querySelectorAll("script");
             Array.prototype.forEach.call(scripts, function (script) {
                 switch (script.type.toLowerCase()) {
                     case "":
@@ -98,9 +105,9 @@
                     cleanseAttributes(children[i]);
                 }
             }
-            cleanseAttributes(cleaner.body);
+            cleanseAttributes(cleaner.documentElement);
 
-            return Array.prototype.slice.call(document.adoptNode(cleaner.body).childNodes);
+            return Array.prototype.slice.call(document.adoptNode(cleaner.documentElement).childNodes);
         }
 
         function cleansePropertySetter(property, setter) {
@@ -119,7 +126,7 @@
             });
         }
         cleansePropertySetter("innerHTML", function (propertyDescriptor, target, elements) {
-            propertyDescriptor.set.call(target, "");
+            empty(target);
             for (var i = 0, len = elements.length; i < len; i++) {
                 target.appendChild(elements[i]);
             }
