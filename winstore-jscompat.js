@@ -106,8 +106,14 @@
                 }
             }
             cleanseAttributes(cleaner.documentElement);
+            
+            var docElement = cleaner.documentElement.childNodes[1];
 
-            return Array.prototype.slice.call(document.adoptNode(cleaner.documentElement).childNodes);
+            if (docElement == null) {
+                docElement = cleaner.documentElement;
+            }
+
+            return Array.prototype.slice.call(document.adoptNode(docElement).childNodes);
         }
 
         function cleansePropertySetter(property, setter) {
