@@ -13,6 +13,7 @@
         var HTMLElement_insertAdjacentHTMLPropertyDescriptor = Object.getOwnPropertyDescriptor(HTMLElement.prototype, "insertAdjacentHTML");
         var Node_get_attributes = Object.getOwnPropertyDescriptor(Node.prototype, "attributes").get;
         var Node_get_childNodes = Object.getOwnPropertyDescriptor(Node.prototype, "childNodes").get;
+        var detectionDiv = document.createElement("div");
 
         function getAttributes(element) {
             return Node_get_attributes.call(element);
@@ -42,6 +43,18 @@
 
         function insertAdjacentHTML(element, position, html) {
             HTMLElement_insertAdjacentHTMLPropertyDescriptor.value.call(element, position, html);
+        }
+        
+        function inUnsafeMode() {
+            var isUnsafe = true;
+            try {
+                detectionDiv.innerHTML = "<test/>";
+            }
+            catch (ex) {
+                isUnsafe = false;
+            }
+            
+            return isUnsafe;
         }
 
         function cleanse(html) {
@@ -112,14 +125,19 @@
 
         function cleansePropertySetter(property, setter) {
             var propertyDescriptor = Object.getOwnPropertyDescriptor(HTMLElement.prototype, property);
+            var originalSetter = propertyDescriptor.set;
             Object.defineProperty(HTMLElement.prototype, property, {
                 get: propertyDescriptor.get,
                 set: function (value) {
-                    var that = this;
-                    var nodes = cleanse(value);
-                    MSApp.execUnsafeLocalFunction(function () {
-                        setter(propertyDescriptor, that, nodes);
-                    });
+                    if(window.WinJS && window.WinJS._execUnsafe && inUnsafeMode()) {
+                        originalSetter.call(this, value);
+                    } else {
+                        var that = this;
+                        var nodes = cleanse(value);
+                        MSApp.execUnsafeLocalFunction(function () {
+                            setter(propertyDescriptor, that, nodes);
+                        });
+                    }
                 },
                 enumerable: propertyDescriptor.enumerable,
                 configurable: propertyDescriptor.configurable,
