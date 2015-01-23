@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Open Technologies, Inc.  All rights reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+// Copyright (c) Microsoft Open Technologies, Inc.  All rights reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 // JavaScript Dynamic Content shim for Windows Store apps
 (function () {
 
@@ -44,7 +44,7 @@
         function insertAdjacentHTML(element, position, html) {
             HTMLElement_insertAdjacentHTMLPropertyDescriptor.value.call(element, position, html);
         }
-        
+
         function inUnsafeMode() {
             var isUnsafe = true;
             try {
@@ -53,7 +53,7 @@
             catch (ex) {
                 isUnsafe = false;
             }
-            
+
             return isUnsafe;
         }
 
@@ -129,7 +129,7 @@
             Object.defineProperty(HTMLElement.prototype, property, {
                 get: propertyDescriptor.get,
                 set: function (value) {
-                    if(window.WinJS && window.WinJS._execUnsafe && inUnsafeMode()) {
+                    if (window.WinJS && window.WinJS._execUnsafe && inUnsafeMode()) {
                         originalSetter.call(this, value);
                     } else {
                         var that = this;
@@ -146,7 +146,15 @@
         cleansePropertySetter("innerHTML", function (propertyDescriptor, target, elements) {
             empty(target);
             for (var i = 0, len = elements.length; i < len; i++) {
-                target.appendChild(elements[i]);
+                var current = elements[i];
+                // Fix for double head / body tags in the document.
+                if (current.tagName === 'HEAD' || current.tagName === 'BODY') {
+                    for (var j = 0; j < current.childNodes.length; j++) {
+                        target.appendChild(current.childNodes[j]);
+                    }
+                } else {
+                    target.appendChild(current);
+                }
             }
         });
         cleansePropertySetter("outerHTML", function (propertyDescriptor, target, elements) {
@@ -155,7 +163,5 @@
             }
             target.parentNode.removeChild(target);
         });
-
     }
-
 }());
