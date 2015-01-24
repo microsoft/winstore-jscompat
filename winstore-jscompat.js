@@ -57,7 +57,7 @@
             return isUnsafe;
         }
 
-        function cleanse(html) {
+        function cleanse(html, targetElement) {
             var cleaner = document.implementation.createHTMLDocument("cleaner");
             empty(cleaner.documentElement);
             MSApp.execUnsafeLocalFunction(function () {
@@ -120,7 +120,20 @@
             }
             cleanseAttributes(cleaner.documentElement);
 
-            return Array.prototype.slice.call(document.adoptNode(cleaner.documentElement).childNodes);
+            var cleanedNodes = [];
+
+            if (targetElement.tagName === 'HTML') {
+                cleanedNodes = Array.prototype.slice.call(document.adoptNode(cleaner.documentElement).childNodes);
+            } else {
+                if (cleaner.head) {
+                    cleanedNodes = cleanedNodes.concat(Array.prototype.slice.call(document.adoptNode(cleaner.head).childNodes));
+                }
+                if (cleaner.body) {
+                    cleanedNodes = cleanedNodes.concat(Array.prototype.slice.call(document.adoptNode(cleaner.body).childNodes));
+                }  
+            }
+
+            return cleanedNodes;
         }
 
         function cleansePropertySetter(property, setter) {
@@ -133,7 +146,7 @@
                         originalSetter.call(this, value);
                     } else {
                         var that = this;
-                        var nodes = cleanse(value);
+                        var nodes = cleanse(value, that);
                         MSApp.execUnsafeLocalFunction(function () {
                             setter(propertyDescriptor, that, nodes);
                         });
