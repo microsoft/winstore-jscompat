@@ -1,0 +1,18 @@
+{
+  "name": "winstore-jscompat",
+  "main": "winstore-jscompat.js",
+  "version": "0.0.1",
+  "homepage": "https://github.com/MSOpenTech/winstore-jscompat",
+  "description": "JavaScript Dynamic Content shim for Windows Store apps",
+  "keywords": [
+    "shim"
+  ],
+  "license": "Apache License, Version 2.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
