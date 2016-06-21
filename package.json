@@ -1,0 +1,19 @@
+{
+  "name": "winstore-jscompat",
+  "version": "1.0.0",
+  "description": "JavaScript Dynamic Content shim for Windows Store apps\r =====\r Use all your favorite JavaScript libraries to create Windows Store apps on Windows 8",
+  "main": "winstore-jscompat.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Microsoft/winstore-jscompat.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Microsoft/winstore-jscompat/issues"
+  },
+  "homepage": "https://github.com/Microsoft/winstore-jscompat#readme"
+}
